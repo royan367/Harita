@@ -49,7 +49,6 @@ public class MapsActivity extends FragmentActivity {
         switch (item.getItemId()) {
             case 0:
                 Intent login = new Intent(this,LoginActivity.class);
-                login.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(login);
                 break;
             default:
