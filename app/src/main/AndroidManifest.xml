@@ -30,6 +30,15 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
+
+        <activity
+            android:name="org.dfir.harita.app.ProfilSayfasi"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+
+
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

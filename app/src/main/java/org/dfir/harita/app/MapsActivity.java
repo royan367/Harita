@@ -47,7 +47,7 @@ public class MapsActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, 0, 0, "Kullanıcı Girişi");
+        menu.add(0, 0, 0, "Yönetici Girişi");
         return true;
     }
 

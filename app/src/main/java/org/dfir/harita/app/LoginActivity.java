@@ -26,6 +26,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -166,15 +168,15 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
+        //if (TextUtils.isEmpty(email)) {
+        //    mEmailView.setError(getString(R.string.error_field_required));
+        //    focusView = mEmailView;
+        //    cancel = true;
+        //} else if (!isEmailValid(email)) {
+        //    mEmailView.setError(getString(R.string.error_invalid_email));
+         //   focusView = mEmailView;
+         //   cancel = true;
+        //}
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -183,11 +185,13 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
     }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
