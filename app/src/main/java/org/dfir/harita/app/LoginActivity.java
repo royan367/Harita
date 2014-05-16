@@ -8,6 +8,7 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,6 +32,11 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+
+import org.dfir.harita.app.model.DaoAccess;
+import org.dfir.harita.app.model.dao.Isletme;
+import org.dfir.harita.app.model.dao.IsletmeDao;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +80,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
 
         // Find the Google+ sign in button.
         mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
@@ -122,12 +130,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
     }
 
-    private boolean validate_login(String userName, String password)
-    {
-        this.userName= userName;
-        this.password= password;
-        return true;
-    }
+
     private void populateAutoComplete() {
         if (VERSION.SDK_INT >= 14) {
             // Use ContactsContract.Profile (API 14+)
@@ -157,6 +160,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
+
+
         boolean cancel = false;
         View focusView = null;
 
@@ -168,15 +173,15 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         }
 
         // Check for a valid email address.
-        //if (TextUtils.isEmpty(email)) {
-        //    mEmailView.setError(getString(R.string.error_field_required));
-        //    focusView = mEmailView;
-        //    cancel = true;
-        //} else if (!isEmailValid(email)) {
-        //    mEmailView.setError(getString(R.string.error_invalid_email));
-         //   focusView = mEmailView;
-         //   cancel = true;
-        //}
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -395,23 +400,19 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            //Data base burada olacak
+            DaoAccess dao= DaoAccess.getSingletonObject(LoginActivity.this);
+            IsletmeDao isletme_dao= dao.getIsletmeDao();
+            Isletme isletme= isletme_dao.queryBuilder()
+                    .where(IsletmeDao.Properties.Kullanici_adi.eq(mEmail),
+                            (IsletmeDao.Properties.Sifre.eq(mPassword))).unique();
+                if(isletme != null)
+                {
+                    MapsActivity.isletme=isletme;
+                    return true;
                 }
-            }
-
-            // TODO: register the new account here.
-            return true;
+                else
+                    return false;
         }
 
         @Override
@@ -420,7 +421,9 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(false);
 
             if (success) {
-                finish();
+                Intent intent = new Intent(LoginActivity.this, ProfilSayfasi.class);
+                startActivity(intent);
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
