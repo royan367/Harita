@@ -8,7 +8,6 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -158,17 +157,15 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        Intent profil = new Intent(this,ProfilSayfasi.class);
-        startActivity(profil);
-    //    boolean cancel = false;
-     //   View focusView = null;
+        boolean cancel = false;
+        View focusView = null;
 
         // Check for a valid password, if the user entered one.
-    //    if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-     //       mPasswordView.setError(getString(R.string.error_invalid_password));
-     //       focusView = mPasswordView;
-     //       cancel = true;
-     //   }
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
 
         // Check for a valid email address.
         //if (TextUtils.isEmpty(email)) {
@@ -181,18 +178,18 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
          //   cancel = true;
         //}
 
-       // if (cancel) {
+        if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-        //    focusView.requestFocus();
-       // } else {
+            focusView.requestFocus();
+        } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
 
-        //    showProgress(true);
-       //     mAuthTask = new UserLoginTask(email, password);
-       //     mAuthTask.execute((Void) null);
-       // }
+            showProgress(true);
+            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask.execute((Void) null);
+        }
     }
 
     private boolean isEmailValid(String email) {
