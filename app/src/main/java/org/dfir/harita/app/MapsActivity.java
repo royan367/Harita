@@ -1,8 +1,18 @@
 package org.dfir.harita.app;
 
+import android.content.Context;
+import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,9 +30,32 @@ public class MapsActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
         setUpMapIfNeeded();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, 0, 0, "Kullanıcı Girişi");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case 0:
+                Intent login = new Intent(this,LoginActivity.class);
+                login.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(login);
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 
     /**
@@ -60,6 +93,21 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if(location!=null)
+        {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            LatLng current_position = new LatLng(latitude, longitude);
+            mMap.addMarker(new MarkerOptions().position(current_position).title("Sizin Konumunuz"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), "Konum Algılanamadı", Toast.LENGTH_LONG).show();
+        }
     }
 }
