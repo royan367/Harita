@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,8 +13,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.dfir.harita.app.model.DaoAccess;
+import org.dfir.harita.app.model.dao.Isletme;
+import org.dfir.harita.app.model.dao.IsletmeDao;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by userr on 16.5.2014.
@@ -64,30 +73,6 @@ public class ProfilSayfasi extends Activity {
 
     }
 
-    private void Ayarlar_PopUp()
-    {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Ayarlar");
-        alert.setMessage("Message");
 
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-        alert.setView(input);
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-
-                // Do something with value!
-            }
-        });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
-        });
-
-        alert.show();
-    }
 }

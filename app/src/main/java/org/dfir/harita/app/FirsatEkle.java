@@ -84,8 +84,8 @@ public class FirsatEkle extends Activity {
                     firsat_dao.refresh(firsat);
                     double latitude = MapsActivity.isletme.getEnlem();
                     double longitude =  MapsActivity.isletme.getBoylam();
-                    LatLng current_position = new LatLng(latitude, longitude);
-                    MapsActivity.mMap.addMarker(new MarkerOptions().position(current_position).title(MapsActivity.isletme.getAd()+":"+str_aciklama));
+                    LatLng position = new LatLng(latitude, longitude);
+                    MapsActivity.mMap.addMarker(new MarkerOptions().position(position).title(MapsActivity.isletme.getAd()+":"+str_aciklama));
                 }
                 catch(Exception e)
                 {
@@ -139,7 +139,6 @@ public class FirsatEkle extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, 0, 0, "Haritaya Dön");
         return true;
     }
 
@@ -147,10 +146,6 @@ public class FirsatEkle extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
-            case 0:
-                Intent harita = new Intent(this, MapsActivity.class);
-                startActivity(harita);
-                break;
             default:
                 break;
         }
