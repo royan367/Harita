@@ -6,25 +6,26 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Address;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.dfir.harita.app.model.DaoAccess;
@@ -32,9 +33,10 @@ import org.dfir.harita.app.model.dao.Firsat;
 import org.dfir.harita.app.model.dao.FirsatDao;
 import org.dfir.harita.app.model.dao.Isletme;
 import org.dfir.harita.app.model.dao.IsletmeDao;
+import org.dfir.harita.app.model.dao.Musteri;
+import org.dfir.harita.app.model.dao.MusteriDao;
 
 import java.util.List;
-import java.util.Locale;
 
 public class MapsActivity extends MyActionBarActivity {
 
@@ -73,6 +75,9 @@ public class MapsActivity extends MyActionBarActivity {
             {
             }
         }
+
+
+
     }
 
 
@@ -136,6 +141,27 @@ public class MapsActivity extends MyActionBarActivity {
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+                // set marker info adapter to the map
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+                        LayoutInflater inflater = getLayoutInflater();
+                        View view = inflater.inflate(R.layout.marker_info_window, null);
+                        assert view != null;
+                        TextView textTitle = (TextView) view.findViewById(R.id.text_title);
+                        TextView textSnippet = (TextView) view.findViewById(R.id.text_snippet);
+
+                        textTitle.setText(marker.getTitle());
+                        textSnippet.setText(marker.getSnippet());
+
+                        return view;
+                    }
+                });
             }
         }
     }
@@ -165,23 +191,36 @@ public class MapsActivity extends MyActionBarActivity {
         }
     }
 
-    /*---------- Listener class to get coordinates ------------- */
-    private class MyLocationListener implements LocationListener {
+    private void addIsletmeMarkers(GoogleMap map) {
+        IsletmeDao isletmeDao = mDaoAccess.getIsletmeDao();
 
-        @Override
-        public void onLocationChanged(Location loc) {
-            //editLocation.setText("");
-            //pb.setVisibility(View.INVISIBLE);
-            Toast.makeText(
-                    getBaseContext(),
-                    "Location changed: Lat: " + loc.getLatitude() + " Lng: "
-                            + loc.getLongitude(), Toast.LENGTH_SHORT).show();
-            String longitude = "Longitude: " + loc.getLongitude();
-            //Log.v(TAG, longitude);
-            String latitude = "Latitude: " + loc.getLatitude();
-            //Log.v(TAG, latitude);
-
+        List<Isletme> isletmeler = isletmeDao.loadAll();
+        for (Isletme isl : isletmeler) {
+            // find fırsatlar for this isletme
+            List<Firsat> firsatlar = isl.getFirsatlar();
+            // if there is at least one firsat for this isletme, the display this isletme
+            if (firsatlar.size() >= 1) {
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(isl.getEnlem(), isl.getBoylam()))
+                        .title(isl.getAd())
+                        .snippet(isl.getAciklama())
+                        .icon(BitmapDescriptorFactory
+                                .fromResource(R.drawable.triangle_green_isletme)));
+            }
         }
+    }
 
+    private void addMusteriMarkers(GoogleMap map) {
+        MusteriDao musteriDao = mDaoAccess.getMusteriDao();
+
+        List<Musteri> musteriler = musteriDao.loadAll();
+        for (Musteri musteri : musteriler) {
+            // add this musteri to the map
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(musteri.getEnlem(), musteri.getBoylam()))
+                    .title("Bir müşteri")
+                    .icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.triangle_green_musteri)));
+        }
     }
 }
