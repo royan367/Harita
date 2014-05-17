@@ -2,6 +2,7 @@ package org.dfir.harita.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,16 +18,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.dfir.harita.app.model.DaoAccess;
+import org.dfir.harita.app.model.dao.Isletme;
 
 public class MapsActivity extends MyActionBarActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
+    public static Isletme isletme;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+     //   SharedPreferences preferences = getSharedPreferences("pref",(int)isletme.getId());
+
     }
 
     @Override
@@ -40,6 +44,8 @@ public class MapsActivity extends MyActionBarActivity {
     protected void onDestroy() {
         super.onDestroy();
         DaoAccess.nullify();
+        isletme=null;
+
     }
 
     @Override
@@ -55,7 +61,6 @@ public class MapsActivity extends MyActionBarActivity {
         switch (item.getItemId()) {
             case 0:
                 Intent login = new Intent(this,LoginActivity.class);
-                login.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(login);
                 break;
             default:
