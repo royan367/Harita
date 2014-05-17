@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -38,7 +39,7 @@ public class FirsatEkle extends Activity {
         final EditText et_aciklama = (EditText)  findViewById(R.id.edittext4);
         final EditText et_firsat_turu = (EditText)  findViewById(R.id.edittext5);
         final EditText et_firsat_kodu = (EditText)  findViewById(R.id.edittext6);
-        final EditText et_kategori = (EditText)  findViewById(R.id.edittext7);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner_kategori);
 
         btn_ekle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +50,7 @@ public class FirsatEkle extends Activity {
                 String str_aciklama=et_aciklama.getText().toString();
                 String str_fırsat_turu=et_firsat_turu.getText().toString();
                 String str_fırsat_kodu=et_firsat_kodu.getText().toString();
-                String str_kategori=et_kategori.getText().toString();
+                String str_kategori = String.valueOf(spinner.getSelectedItem());
 
 
                 DaoAccess dao= DaoAccess.getSingletonObject(FirsatEkle.this);

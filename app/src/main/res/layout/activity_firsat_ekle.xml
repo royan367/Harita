@@ -124,6 +124,8 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             />
+
+
     </LinearLayout>
 
 
@@ -164,14 +166,13 @@
             android:layout_weight="1"
             android:textColor="#000000"
             />
-        <EditText
-            android:id="@+id/edittext7"
-            android:gravity="center"
+        <Spinner
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            />
+            android:id="@+id/spinner_kategori"
+            android:prompt="@string/kategori"
+            android:entries="@array/IsletmeKategori"
+            android:layout_weight="1" />
     </LinearLayout>
 
 
