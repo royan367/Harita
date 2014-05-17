@@ -1,12 +1,16 @@
 package org.dfir.harita.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,8 +37,8 @@ public class ProfilSayfasi extends Activity {
                 android.R.layout.simple_list_item_1, profil_tercihleri);
         list_view.setAdapter(adapter);
 
-        final Intent firsat_sayfasi = new Intent(this, FirsatSayfasi.class);
 
+        final Intent firsat_sayfasi = new Intent(this, FirsatSayfasi.class);
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView arg0, View view, int position, long id) {
@@ -48,8 +52,7 @@ public class ProfilSayfasi extends Activity {
                     case 2:
                         break;
                     case 3:
-                        break;
-                    case 4:
+                        Toast.makeText(ProfilSayfasi.this, "Ortalama Puan:" + Float.toString(MapsActivity.isletme.getOy()), Toast.LENGTH_LONG).show();
                         break;
                     default:
                         break;
@@ -59,5 +62,32 @@ public class ProfilSayfasi extends Activity {
             }
         });
 
+    }
+
+    private void Ayarlar_PopUp()
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Ayarlar");
+        alert.setMessage("Message");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                // Do something with value!
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
     }
 }

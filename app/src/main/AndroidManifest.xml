@@ -28,7 +28,7 @@
 
         <activity
             android:name="org.dfir.harita.app.LoginActivity"
-            android:label="@string/title_activity_login"
+            android:label="Giriş Yap"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity
@@ -39,6 +39,10 @@
         <activity
             android:name="org.dfir.harita.app.FirsatSayfasi"
             android:label="@string/title_activity_firsat_sayfasi" >
+        </activity>
+        <activity
+            android:name="org.dfir.harita.app.FirsatEkle"
+            android:label="@string/title_activity_firsat_ekle" >
         </activity>
     </application>
 
