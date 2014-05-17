@@ -6,8 +6,11 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.dfir.harita.app.model.DaoAccess;
@@ -67,10 +71,9 @@ public class MapsActivity extends MyActionBarActivity {
             }
             catch(Exception e)
             {
+                e.printStackTrace();
             }
         }
-
-
     }
 
     @Override
@@ -133,7 +136,30 @@ public class MapsActivity extends MyActionBarActivity {
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+                // set marker info adapter to the map
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+                        LayoutInflater inflater = getLayoutInflater();
+                        View view = inflater.inflate(R.layout.marker_info_window, null);
+                        assert view != null;
+                        TextView textTitle = (TextView) view.findViewById(R.id.text_title);
+                        TextView textSnippet = (TextView) view.findViewById(R.id.text_snippet);
+
+                        textTitle.setText(marker.getTitle());
+                        textSnippet.setText(marker.getSnippet());
+
+                        return view;
+                    }
+                });
             }
+        } else {
+            setUpMap();
         }
     }
 
@@ -144,6 +170,9 @@ public class MapsActivity extends MyActionBarActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
+
+        // clear the map first
+        mMap.clear();
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
