@@ -28,7 +28,7 @@
 
         <activity
             android:name="org.dfir.harita.app.LoginActivity"
-            android:label="Giriş Yap"
+            android:label="@string/giris_yap"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity

@@ -169,7 +169,6 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             List<Isletme> isletme = isletme_dao.queryBuilder()
                     .where(IsletmeDao.Properties.Kullanici_adi.eq(email),
                             (IsletmeDao.Properties.Sifre.eq(password))).list();
-            Toast.makeText(getApplicationContext(),Integer.toString(isletme.size()),Toast.LENGTH_LONG).show();
             if(isletme != null)
             {
                 MapsActivity.isletme=isletme.get(0);

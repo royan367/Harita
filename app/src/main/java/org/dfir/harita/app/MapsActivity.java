@@ -18,18 +18,52 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.dfir.harita.app.model.DaoAccess;
+import org.dfir.harita.app.model.dao.Firsat;
+import org.dfir.harita.app.model.dao.FirsatDao;
 import org.dfir.harita.app.model.dao.Isletme;
+import org.dfir.harita.app.model.dao.IsletmeDao;
+
+import java.util.List;
 
 public class MapsActivity extends MyActionBarActivity {
 
     public static GoogleMap mMap; // Might be null if Google Play services APK is not available.
     public static Isletme isletme;
+    public static Isletme isletme1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         setUpMapIfNeeded();
-     //   SharedPreferences preferences = getSharedPreferences("pref",(int)isletme.getId());
+        isletme1 = new Isletme();
+        DaoAccess dao= DaoAccess.getSingletonObject(MapsActivity.this);
+        FirsatDao firsat_dao= dao.getFirsatDao();
+        List<Firsat> firsatlar = firsat_dao.queryBuilder().list();
+        double latitude;
+        double longitude;
+
+        for (int i = 0; i < firsatlar.size(); i++)
+        {
+            long l_isletme = firsatlar.get(i).getIsletme_id();
+
+            IsletmeDao isletme_dao= dao.getIsletmeDao();
+            try {
+                List<Isletme> isletme = isletme_dao.queryBuilder().where(IsletmeDao.Properties.Id.eq(l_isletme)).list();
+                if(isletme != null)
+                {
+                    isletme1=isletme.get(0);
+                    latitude = isletme1.getEnlem();
+                    longitude = isletme1.getBoylam();
+                    LatLng position = new LatLng(latitude, longitude);
+                    mMap.addMarker(new MarkerOptions().position(position).title(MapsActivity.isletme1.getAd()+":"+firsatlar.get(i).getAciklama()));
+                }
+            }
+            catch(Exception e)
+            {
+            }
+        }
+
 
     }
 
