@@ -6,10 +6,8 @@ import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -22,7 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.dfir.harita.app.model.DaoAccess;
 import org.dfir.harita.app.model.dao.Isletme;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends MyActionBarActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     public static Isletme isletme;
