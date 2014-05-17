@@ -1,5 +1,8 @@
 package org.dfir.harita.app;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,8 +10,12 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,7 +41,6 @@ public class MapsActivity extends MyActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         setUpMapIfNeeded();
         isletme1 = new Isletme();
         DaoAccess dao= DaoAccess.getSingletonObject(MapsActivity.this);
@@ -65,7 +71,9 @@ public class MapsActivity extends MyActionBarActivity {
         }
 
 
+
     }
+
 
     @Override
     protected void onResume()
