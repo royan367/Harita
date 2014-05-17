@@ -140,6 +140,7 @@ public class FirsatEkle extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        menu.add(0, 0, 0, "Haritaya Dön");
         return true;
     }
 
@@ -147,6 +148,12 @@ public class FirsatEkle extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
+            case 0:
+                finish();
+                Intent intent = new Intent(this, MapsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                break;
             default:
                 break;
         }

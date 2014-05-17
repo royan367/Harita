@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.dfir.harita.app.model.DaoAccess;
 import org.dfir.harita.app.model.dao.Firsat;
@@ -57,6 +58,7 @@ public class FirsatSayfasi extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, 0, 0, "Yeni Fırsat Ekle");
+        menu.add(0, 1, 1, "Haritaya Dön");
         return true;
     }
 
@@ -67,6 +69,12 @@ public class FirsatSayfasi extends ActionBarActivity {
             case 0:
                 Intent firsat_ekle = new Intent(this, FirsatEkle.class);
                 startActivity(firsat_ekle);
+                break;
+            case 1:
+                finish();
+                Intent intent = new Intent(this, MapsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
                 break;
             default:
                 break;

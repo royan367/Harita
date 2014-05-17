@@ -6,7 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -31,6 +34,7 @@ import org.dfir.harita.app.model.dao.Isletme;
 import org.dfir.harita.app.model.dao.IsletmeDao;
 
 import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends MyActionBarActivity {
 
@@ -69,9 +73,6 @@ public class MapsActivity extends MyActionBarActivity {
             {
             }
         }
-
-
-
     }
 
 
@@ -162,5 +163,25 @@ public class MapsActivity extends MyActionBarActivity {
         {
             Toast.makeText(getApplicationContext(), "Konum Algılanamadı", Toast.LENGTH_LONG).show();
         }
+    }
+
+    /*---------- Listener class to get coordinates ------------- */
+    private class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            //editLocation.setText("");
+            //pb.setVisibility(View.INVISIBLE);
+            Toast.makeText(
+                    getBaseContext(),
+                    "Location changed: Lat: " + loc.getLatitude() + " Lng: "
+                            + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+            String longitude = "Longitude: " + loc.getLongitude();
+            //Log.v(TAG, longitude);
+            String latitude = "Latitude: " + loc.getLatitude();
+            //Log.v(TAG, latitude);
+
+        }
+
     }
 }
