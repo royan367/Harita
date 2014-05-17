@@ -76,18 +76,26 @@ public class MyActionBarActivity extends ActionBarActivity {
 
         // add dummy musteriler
         Musteri musteri1 = new Musteri();
+        musteri1.setEnlem(39.893303);
+        musteri1.setBoylam(32.775287);
         musteri1.setOy(3.25f);
         musteriDao.insertOrReplace(musteri1);
 
         Musteri musteri2 = new Musteri();
+        musteri2.setEnlem(39.899016);
+        musteri2.setBoylam(32.785394);
         musteri2.setOy(4.25f);
         musteriDao.insertOrReplace(musteri2);
 
         Musteri musteri3 = new Musteri();
+        musteri3.setEnlem(39.893485);
+        musteri3.setBoylam(32.790801);
         musteri3.setOy(3.5f);
         musteriDao.insertOrReplace(musteri3);
 
         Musteri musteri4 = new Musteri();
+        musteri4.setEnlem(39.889056);
+        musteri4.setBoylam(32.785673);
         musteri4.setOy(4.5f);
         musteriDao.insertOrReplace(musteri4);
     }
