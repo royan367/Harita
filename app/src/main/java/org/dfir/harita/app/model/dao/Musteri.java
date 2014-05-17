@@ -11,6 +11,8 @@ import de.greenrobot.dao.DaoException;
 public class Musteri {
 
     private Long id;
+    private Double enlem;
+    private Double boylam;
     private Float oy;
 
     /** Used to resolve relations */
@@ -29,8 +31,10 @@ public class Musteri {
         this.id = id;
     }
 
-    public Musteri(Long id, Float oy) {
+    public Musteri(Long id, Double enlem, Double boylam, Float oy) {
         this.id = id;
+        this.enlem = enlem;
+        this.boylam = boylam;
         this.oy = oy;
     }
 
@@ -46,6 +50,22 @@ public class Musteri {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Double getEnlem() {
+        return enlem;
+    }
+
+    public void setEnlem(Double enlem) {
+        this.enlem = enlem;
+    }
+
+    public Double getBoylam() {
+        return boylam;
+    }
+
+    public void setBoylam(Double boylam) {
+        this.boylam = boylam;
     }
 
     public Float getOy() {

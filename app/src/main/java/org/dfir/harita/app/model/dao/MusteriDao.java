@@ -24,7 +24,9 @@ public class MusteriDao extends AbstractDao<Musteri, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Oy = new Property(1, Float.class, "oy", false, "OY");
+        public final static Property Enlem = new Property(1, Double.class, "enlem", false, "ENLEM");
+        public final static Property Boylam = new Property(2, Double.class, "boylam", false, "BOYLAM");
+        public final static Property Oy = new Property(3, Float.class, "oy", false, "OY");
     };
 
     private DaoSession daoSession;
@@ -44,7 +46,9 @@ public class MusteriDao extends AbstractDao<Musteri, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'MUSTERI' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'OY' REAL);"); // 1: oy
+                "'ENLEM' REAL," + // 1: enlem
+                "'BOYLAM' REAL," + // 2: boylam
+                "'OY' REAL);"); // 3: oy
     }
 
     /** Drops the underlying database table. */
@@ -63,9 +67,19 @@ public class MusteriDao extends AbstractDao<Musteri, Long> {
             stmt.bindLong(1, id);
         }
  
+        Double enlem = entity.getEnlem();
+        if (enlem != null) {
+            stmt.bindDouble(2, enlem);
+        }
+ 
+        Double boylam = entity.getBoylam();
+        if (boylam != null) {
+            stmt.bindDouble(3, boylam);
+        }
+ 
         Float oy = entity.getOy();
         if (oy != null) {
-            stmt.bindDouble(2, oy);
+            stmt.bindDouble(4, oy);
         }
     }
 
@@ -86,7 +100,9 @@ public class MusteriDao extends AbstractDao<Musteri, Long> {
     public Musteri readEntity(Cursor cursor, int offset) {
         Musteri entity = new Musteri( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getFloat(offset + 1) // oy
+            cursor.isNull(offset + 1) ? null : cursor.getDouble(offset + 1), // enlem
+            cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // boylam
+            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3) // oy
         );
         return entity;
     }
@@ -95,7 +111,9 @@ public class MusteriDao extends AbstractDao<Musteri, Long> {
     @Override
     public void readEntity(Cursor cursor, Musteri entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setOy(cursor.isNull(offset + 1) ? null : cursor.getFloat(offset + 1));
+        entity.setEnlem(cursor.isNull(offset + 1) ? null : cursor.getDouble(offset + 1));
+        entity.setBoylam(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
+        entity.setOy(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
      }
     
     /** @inheritdoc */
