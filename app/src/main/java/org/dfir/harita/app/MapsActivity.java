@@ -2,7 +2,6 @@ package org.dfir.harita.app;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -22,6 +22,8 @@ import org.dfir.harita.app.model.dao.Firsat;
 import org.dfir.harita.app.model.dao.FirsatDao;
 import org.dfir.harita.app.model.dao.Isletme;
 import org.dfir.harita.app.model.dao.IsletmeDao;
+import org.dfir.harita.app.model.dao.Musteri;
+import org.dfir.harita.app.model.dao.MusteriDao;
 
 import java.util.List;
 
@@ -30,15 +32,19 @@ public class MapsActivity extends MyActionBarActivity {
     public static GoogleMap mMap; // Might be null if Google Play services APK is not available.
     public static Isletme isletme;
     public static Isletme isletme1;
+
+    private DaoAccess mDaoAccess;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        setUpMapIfNeeded();
+        // TODO NullPointerException a neden oluyor
+        //setUpMapIfNeeded();
         isletme1 = new Isletme();
-        DaoAccess dao= DaoAccess.getSingletonObject(MapsActivity.this);
-        FirsatDao firsat_dao= dao.getFirsatDao();
+        mDaoAccess = DaoAccess.getSingletonObject(MapsActivity.this);
+        FirsatDao firsat_dao= mDaoAccess.getFirsatDao();
         List<Firsat> firsatlar = firsat_dao.queryBuilder().list();
         double latitude;
         double longitude;
@@ -47,7 +53,7 @@ public class MapsActivity extends MyActionBarActivity {
         {
             long l_isletme = firsatlar.get(i).getIsletme_id();
 
-            IsletmeDao isletme_dao= dao.getIsletmeDao();
+            IsletmeDao isletme_dao= mDaoAccess.getIsletmeDao();
             try {
                 List<Isletme> isletme = isletme_dao.queryBuilder().where(IsletmeDao.Properties.Id.eq(l_isletme)).list();
                 if(isletme != null)
@@ -128,6 +134,8 @@ public class MapsActivity extends MyActionBarActivity {
             if (mMap != null) {
                 setUpMap();
             }
+        } else {
+            setUpMap();
         }
     }
 
@@ -139,6 +147,9 @@ public class MapsActivity extends MyActionBarActivity {
      */
     private void setUpMap() {
 
+        // clean old markers first
+        mMap.clear();
+
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
@@ -147,12 +158,63 @@ public class MapsActivity extends MyActionBarActivity {
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
             LatLng current_position = new LatLng(latitude, longitude);
-            mMap.addMarker(new MarkerOptions().position(current_position).title("Sizin Konumunuz"));
+            if (isletme != null) {    // yani bir işletme giriş yapmış
+                mMap.addMarker(new MarkerOptions()
+                        .position(current_position)
+                        .title(isletme.getAd())
+                        .snippet(isletme.getAciklama())
+                        .icon(BitmapDescriptorFactory
+                                .fromResource(R.drawable.triangle_blue_isletme)));
+            } else {    // yani bir işletme giriş yapmamış
+                mMap.addMarker(new MarkerOptions()
+                        .position(current_position)
+                        .title("Buradasınız")
+                        .icon(BitmapDescriptorFactory
+                                .fromResource(R.drawable.triangle_blue_musteri)));
+            }
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
+
+            // add işletme markers
+            addIsletmeMarkers(mMap);
+            // add müşteri markers
+            addMusteriMarkers(mMap);
         }
         else
         {
             Toast.makeText(getApplicationContext(), "Konum Algılanamadı", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void addIsletmeMarkers(GoogleMap map) {
+        IsletmeDao isletmeDao = mDaoAccess.getIsletmeDao();
+
+        List<Isletme> isletmeler = isletmeDao.loadAll();
+        for (Isletme isl : isletmeler) {
+            // find fırsatlar for this isletme
+            List<Firsat> firsatlar = isl.getFirsatlar();
+            // if there is at least one firsat for this isletme, the display this isletme
+            if (firsatlar.size() >= 1) {
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(isl.getEnlem(), isl.getBoylam()))
+                        .title(isl.getAd())
+                        .snippet(isl.getAciklama())
+                        .icon(BitmapDescriptorFactory
+                                .fromResource(R.drawable.triangle_green_isletme)));
+            }
+        }
+    }
+
+    private void addMusteriMarkers(GoogleMap map) {
+        MusteriDao musteriDao = mDaoAccess.getMusteriDao();
+
+        List<Musteri> musteriler = musteriDao.loadAll();
+        for (Musteri musteri : musteriler) {
+            // add this musteri to the map
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(musteri.getEnlem(), musteri.getBoylam()))
+                    .title("Bir müşteri")
+                    .icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.triangle_green_musteri)));
         }
     }
 }
