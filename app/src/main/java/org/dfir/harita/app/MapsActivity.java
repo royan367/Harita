@@ -75,9 +75,6 @@ public class MapsActivity extends MyActionBarActivity {
             {
             }
         }
-
-
-
     }
 
 
