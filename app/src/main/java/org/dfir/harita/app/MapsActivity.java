@@ -134,8 +134,6 @@ public class MapsActivity extends MyActionBarActivity {
             if (mMap != null) {
                 setUpMap();
             }
-        } else {
-            setUpMap();
         }
     }
 
@@ -146,9 +144,6 @@ public class MapsActivity extends MyActionBarActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-
-        // clean old markers first
-        mMap.clear();
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();

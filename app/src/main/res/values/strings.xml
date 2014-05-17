@@ -9,5 +9,14 @@
     <string name="title_activity_firsat_sayfasi">Fırsat Sayfası</string>
     <string name="title_activity_firsat_ekle">Firsat Ekle</string>
     <string name="giris_yap">Giriş Yap</string>
+    <string name="kategori">Bir Kategori Seçiniz</string>
+
+    <string-array name="IsletmeKategori">
+        <item>Giyim</item>
+        <item>Gıda</item>
+        <item>Kozmatik</item>
+        <item>Market</item>
+        <item>Sinema</item>
+    </string-array>
 
 </resources>
