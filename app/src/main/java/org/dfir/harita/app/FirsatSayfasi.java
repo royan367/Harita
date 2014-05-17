@@ -29,16 +29,16 @@ public class FirsatSayfasi extends ActionBarActivity {
         ListView list_view = (ListView) findViewById(R.id.list_view);
 
         DaoAccess dao = DaoAccess.getSingletonObject(FirsatSayfasi.this);
-        FirsatDao isletme_dao = dao.getFirsatDao();
+        FirsatDao firsat_dao = dao.getFirsatDao();
 
-        List<Firsat> firsatlar = isletme_dao.queryBuilder().list();
+        List<Firsat> firsatlar = firsat_dao.queryBuilder().list();
 
         ArrayList<String> liste_firsat = new ArrayList<String>();
 
         for (int i = 0; i < firsatlar.size(); i++) {
-            String str = firsatlar.get(i).getFirsat_kodu() + "\n" + firsatlar.get(i).getKategori() + "\n" +
-                    firsatlar.get(i).getAciklama() + "\n" + firsatlar.get(i).getBaslangic().toString() + "\n" +
-                    Integer.toString(firsatlar.get(i).getSure()) + "\n" + Integer.toString(firsatlar.get(i).getKac_kisi());
+            String str = "Fırsat Kodu:" +firsatlar.get(i).getFirsat_kodu() + "\n" + "Kategori:"+firsatlar.get(i).getKategori() + "\n" +
+                    "Açıklama:"+firsatlar.get(i).getAciklama() + "\n" + "Başlangıç Tarihi:"+firsatlar.get(i).getBaslangic().toString() + "\n" +
+                    "Süre:"+Integer.toString(firsatlar.get(i).getSure()) + "\n" + "Kişi Sayısı:"+Integer.toString(firsatlar.get(i).getKac_kisi());
             liste_firsat.add(i, str);
         }
 
@@ -55,8 +55,7 @@ public class FirsatSayfasi extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.firsat_sayfasi, menu);
+        super.onCreateOptionsMenu(menu);
         menu.add(0, 0, 0, "Yeni Fırsat Ekle");
         return true;
     }

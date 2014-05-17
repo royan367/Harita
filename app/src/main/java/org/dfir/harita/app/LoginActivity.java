@@ -161,53 +161,64 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         String password = mPasswordView.getText().toString();
 
         MapsActivity.isletme = new Isletme();
-        MapsActivity.isletme.setKullanici_adi("fatih inan");
-        MapsActivity.isletme.setSifre("1905");
-        MapsActivity.isletme.setAciklama("açıklama");
-        MapsActivity.isletme.setAd("espark");
-        MapsActivity.isletme.setAdres("bağlar");
-        MapsActivity.isletme.setEnlem(39.425439956852024);
-        MapsActivity.isletme.setBoylam(31.768575622479446);
-        MapsActivity.isletme.setId((long)1);
-        MapsActivity.isletme.setKategori("kategori1");
-        MapsActivity.isletme.setOy(new Float(2.5));
 
-        Intent intent = new Intent(LoginActivity.this, ProfilSayfasi.class);
-        startActivity(intent);
+        DaoAccess dao= DaoAccess.getSingletonObject(LoginActivity.this);
+        IsletmeDao isletme_dao= dao.getIsletmeDao();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
+        try {
+            List<Isletme> isletme = isletme_dao.queryBuilder()
+                    .where(IsletmeDao.Properties.Kullanici_adi.eq(email),
+                            (IsletmeDao.Properties.Sifre.eq(password))).list();
+            Toast.makeText(getApplicationContext(),Integer.toString(isletme.size()),Toast.LENGTH_LONG).show();
+            if(isletme != null)
+            {
+                MapsActivity.isletme=isletme.get(0);
+                Intent intent = new Intent(LoginActivity.this, ProfilSayfasi.class);
+                startActivity(intent);
+            }
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(getApplicationContext(), "Hatalı Kullanıcı Adı veya Şifre", Toast.LENGTH_LONG).show();
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
 
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
-        }
+
+
+//        boolean cancel = false;
+//        View focusView = null;
+//
+//        // Check for a valid password, if the user entered one.
+//        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+//            mPasswordView.setError(getString(R.string.error_invalid_password));
+//            focusView = mPasswordView;
+//            cancel = true;
+//        }
+//
+//        // Check for a valid email address.
+//        if (TextUtils.isEmpty(email)) {
+//            mEmailView.setError(getString(R.string.error_field_required));
+//            focusView = mEmailView;
+//            cancel = true;
+//        } else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
+//
+//        if (cancel) {
+//            // There was an error; don't attempt login and focus the first
+//            // form field with an error.
+//            focusView.requestFocus();
+//        } else {
+//            // Show a progress spinner, and kick off a background task to
+//            // perform the user login attempt.
+//
+//            showProgress(true);
+//            mAuthTask = new UserLoginTask(email, password);
+//            mAuthTask.execute((Void) null);
+//        }
     }
 
     private boolean isEmailValid(String email) {

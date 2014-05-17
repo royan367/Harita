@@ -8,5 +8,6 @@
     <string name="title_activity_profil_sayfasi">Profil Sayfası</string>
     <string name="title_activity_firsat_sayfasi">Fırsat Sayfası</string>
     <string name="title_activity_firsat_ekle">FirsatEkle</string>
+    <string name="giris_yap">Giriş Yap</string>
 
 </resources>
