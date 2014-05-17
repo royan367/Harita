@@ -117,8 +117,10 @@ public class MyDaoGenerator
         Entity musteriTable = schema.addEntity(TABLE_NAME_MUSTERI);
 
         // generate the fields
-        Map<String, Property> properties = new HashMap<String, Property>(2);
+        Map<String, Property> properties = new HashMap<String, Property>(4);
         properties.put("id", musteriTable.addIdProperty().getProperty());
+        properties.put("enlem", musteriTable.addDoubleProperty("enlem").getProperty());
+        properties.put("boylam", musteriTable.addDoubleProperty("boylam").getProperty());
         properties.put("oy", musteriTable.addFloatProperty("oy").getProperty());
 
         // put tables and fields to appropriate maps
