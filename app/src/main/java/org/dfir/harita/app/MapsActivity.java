@@ -22,7 +22,7 @@ import org.dfir.harita.app.model.dao.Isletme;
 
 public class MapsActivity extends MyActionBarActivity {
 
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    public static GoogleMap mMap; // Might be null if Google Play services APK is not available.
     public static Isletme isletme;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

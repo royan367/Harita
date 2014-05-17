@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import org.dfir.harita.app.model.DaoAccess;
 import org.dfir.harita.app.model.dao.Firsat;
 import org.dfir.harita.app.model.dao.FirsatDao;
@@ -22,8 +25,6 @@ import java.text.SimpleDateFormat;
 
 
 public class FirsatEkle extends Activity {
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,10 @@ public class FirsatEkle extends Activity {
                 {
                     firsat_dao.insert(firsat);
                     firsat_dao.refresh(firsat);
+                    double latitude = MapsActivity.isletme.getEnlem();
+                    double longitude =  MapsActivity.isletme.getBoylam();
+                    LatLng current_position = new LatLng(latitude, longitude);
+                    MapsActivity.mMap.addMarker(new MarkerOptions().position(current_position).title(MapsActivity.isletme.getAd()+":"+str_aciklama));
                 }
                 catch(Exception e)
                 {
@@ -84,20 +89,22 @@ public class FirsatEkle extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.firsat_ekle, menu);
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, 0, 0, "Haritaya Dön");
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case 0:
+                Intent harita = new Intent(this, MapsActivity.class);
+                startActivity(harita);
+                break;
+            default:
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 }

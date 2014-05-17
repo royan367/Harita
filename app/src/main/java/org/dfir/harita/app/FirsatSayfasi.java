@@ -57,6 +57,7 @@ public class FirsatSayfasi extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, 0, 0, "Yeni Fırsat Ekle");
+        menu.add(0, 0, 1, "Haritaya Dön");
         return true;
     }
 
@@ -67,6 +68,10 @@ public class FirsatSayfasi extends ActionBarActivity {
             case 0:
                 Intent firsat_ekle = new Intent(this, FirsatEkle.class);
                 startActivity(firsat_ekle);
+                break;
+            case 1:
+                Intent harita = new Intent(this, MapsActivity.class);
+                startActivity(harita);
                 break;
             default:
                 break;
